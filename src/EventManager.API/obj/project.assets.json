@@ -88,6 +88,43 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "EventManager.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "EventManager.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EventManager.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EventManager.Application.dll": {}
+        }
+      },
+      "EventManager.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/EventManager.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EventManager.Domain.dll": {}
+        }
+      },
+      "EventManager.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "EventManager.Application": "1.0.0",
+          "EventManager.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EventManager.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EventManager.Infrastructure.dll": {}
+        }
       }
     }
   },
@@ -439,10 +476,27 @@
         "swashbuckle.aspnetcore.swaggerui.6.6.2.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
+    },
+    "EventManager.Application/1.0.0": {
+      "type": "project",
+      "path": "../EventManager.Application/EventManager.Application.csproj",
+      "msbuildProject": "../EventManager.Application/EventManager.Application.csproj"
+    },
+    "EventManager.Domain/1.0.0": {
+      "type": "project",
+      "path": "../EventManager.Domain/EventManager.Domain.csproj",
+      "msbuildProject": "../EventManager.Domain/EventManager.Domain.csproj"
+    },
+    "EventManager.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../EventManager.Infrastructure/EventManager.Infrastructure.csproj",
+      "msbuildProject": "../EventManager.Infrastructure/EventManager.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "EventManager.Application >= 1.0.0",
+      "EventManager.Infrastructure >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.6.2"
     ]
   },
@@ -470,7 +524,14 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Jefferson\\Documents\\GitHub\\EventManager\\src\\EventManager.Application\\EventManager.Application.csproj": {
+              "projectPath": "C:\\Users\\Jefferson\\Documents\\GitHub\\EventManager\\src\\EventManager.Application\\EventManager.Application.csproj"
+            },
+            "C:\\Users\\Jefferson\\Documents\\GitHub\\EventManager\\src\\EventManager.Infrastructure\\EventManager.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\Jefferson\\Documents\\GitHub\\EventManager\\src\\EventManager.Infrastructure\\EventManager.Infrastructure.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
