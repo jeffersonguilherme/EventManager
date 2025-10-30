@@ -1,0 +1,56 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "EventManager.Infrastructure/1.0.0": {
+        "dependencies": {
+          "EventManager.Application": "1.0.0",
+          "EventManager.Domain": "1.0.0"
+        },
+        "runtime": {
+          "EventManager.Infrastructure.dll": {}
+        }
+      },
+      "EventManager.Application/1.0.0": {
+        "dependencies": {
+          "EventManager.Domain": "1.0.0"
+        },
+        "runtime": {
+          "EventManager.Application.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "EventManager.Domain/1.0.0": {
+        "runtime": {
+          "EventManager.Domain.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "EventManager.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "EventManager.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "EventManager.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

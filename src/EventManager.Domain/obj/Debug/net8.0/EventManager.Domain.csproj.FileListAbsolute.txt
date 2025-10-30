@@ -1,0 +1,12 @@
+C:\Users\Jefferson\Documents\GitHub\EventManager\src\EventManager.Domain\bin\Debug\net8.0\EventManager.Domain.deps.json
+C:\Users\Jefferson\Documents\GitHub\EventManager\src\EventManager.Domain\bin\Debug\net8.0\EventManager.Domain.dll
+C:\Users\Jefferson\Documents\GitHub\EventManager\src\EventManager.Domain\bin\Debug\net8.0\EventManager.Domain.pdb
+C:\Users\Jefferson\Documents\GitHub\EventManager\src\EventManager.Domain\obj\Debug\net8.0\EventManager.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Jefferson\Documents\GitHub\EventManager\src\EventManager.Domain\obj\Debug\net8.0\EventManager.Domain.AssemblyInfoInputs.cache
+C:\Users\Jefferson\Documents\GitHub\EventManager\src\EventManager.Domain\obj\Debug\net8.0\EventManager.Domain.AssemblyInfo.cs
+C:\Users\Jefferson\Documents\GitHub\EventManager\src\EventManager.Domain\obj\Debug\net8.0\EventManager.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Jefferson\Documents\GitHub\EventManager\src\EventManager.Domain\obj\Debug\net8.0\EventManager.Domain.sourcelink.json
+C:\Users\Jefferson\Documents\GitHub\EventManager\src\EventManager.Domain\obj\Debug\net8.0\EventManager.Domain.dll
+C:\Users\Jefferson\Documents\GitHub\EventManager\src\EventManager.Domain\obj\Debug\net8.0\refint\EventManager.Domain.dll
+C:\Users\Jefferson\Documents\GitHub\EventManager\src\EventManager.Domain\obj\Debug\net8.0\EventManager.Domain.pdb
+C:\Users\Jefferson\Documents\GitHub\EventManager\src\EventManager.Domain\obj\Debug\net8.0\ref\EventManager.Domain.dll
