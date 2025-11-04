@@ -1,4 +1,4 @@
-namespace EvenetManager.Domain.Models;
+namespace EventManager.Domain.Models;
 
 public class User
 {
