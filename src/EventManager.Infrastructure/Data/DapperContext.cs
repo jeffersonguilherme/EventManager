@@ -1,21 +1,22 @@
-using System.Data;
+using AutoMapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
-namespace EventManager.Infrastructure.Data;
+namespace EventManager.Infrastructure;
 
 public class DapperContext
 {
     private readonly IConfiguration _configuration;
-    private readonly string _connectionString;
-    public DapperContext(IConfiguration configuration)
+    private readonly IMapper _mapper;
+
+    public DapperContext(IConfiguration configuration, IMapper mapper)
     {
         _configuration = configuration;
-        _connectionString = _configuration.GetConnectionString("DefaultConnection");
+        _mapper = mapper;
     }
 
-    public IDbConnection CreateConnection()
+    public SqlConnection CreateConnection()
     {
-        return new SqlConnection(_connectionString);
+        return new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
     }
 }

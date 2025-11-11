@@ -1,31 +1,61 @@
 using EventManager.Domain.Models;
+using EventManager.Domain.Repositories.Interfaces;
 
 namespace EventManager.Domain.Services;
 
-public class EvventService : IEventService
+public class EventService : IEventService
 {
-    public Task Adicionar(Event evento)
+    private readonly IEventRepository _repository;
+
+    public EventService(IEventRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
     }
 
-    public Task Atualizar(Event evento)
+    public async Task AddAsync(Event evento)
     {
-        throw new NotImplementedException();
+        await _repository.AddAsync(evento);
     }
 
-    public Task Excluir(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var evento = await _repository.GetByIdAsync(id);
+        if (evento == null)
+            throw new ArgumentException("Evento não encontrado");
+
+        await _repository.DeleteAsync(id);
     }
 
-    public Task<Event> ObterPorId(Guid id)
+    public async Task<IEnumerable<Event>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var listaEventos = await _repository.GetAllAsync();
+        return listaEventos;
     }
 
-    public Task<IEnumerable<Event>> ObterTodos()
+    public async Task<Event> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var evento = await _repository.GetByIdAsync(id);
+        if (evento == null)
+            throw new ArgumentException("Evento não encontrado");
+
+        return evento;
+    }
+
+    public async Task UpdateAsync(Event paramEvento)
+    {
+        var evento = await _repository.GetByIdAsync(paramEvento.Id);
+
+        if (evento == null)
+        {
+            throw new ArgumentException("Evento não encontrado");
+        }
+
+        evento.Name = paramEvento.Name;
+        evento.Description = paramEvento.Description;
+        evento.StartDate = paramEvento.StartDate;
+        evento.EndDate = paramEvento.EndDate;
+        evento.DateUpdate = DateTime.Now;
+
+        await _repository.UpdateAsync(evento);
     }
 }

@@ -1,5 +1,9 @@
-using System.Data;
-using EventManager.Infrastructure.Data;
+using EventManager.Application.Interfaces;
+using EventManager.Application.Services;
+using EventManager.Domain.Repositories.Interfaces;
+using EventManager.Domain.Services;
+using EventManager.Infrastructure;
+using EventManager.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,13 +14,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<DapperContext>();
-builder.Services.AddTransient<IDbConnection>(sp =>
-{
-    var context = sp.GetRequiredService<DapperContext>();
-    return context.CreateConnection();
-});
+builder.Services.AddScoped<IEventAppService, EventAppService>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IUserAppService, UserAppService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+builder.Services.AddScoped<DapperContext>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();

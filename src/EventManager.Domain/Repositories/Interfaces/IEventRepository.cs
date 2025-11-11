@@ -2,7 +2,7 @@ using EventManager.Domain.Models;
 
 namespace EventManager.Domain.Repositories.Interfaces;
 
-public interface IEventRepository : IBaseRepository<Event>
+public interface IEventRepository : IBaserepository<Event>
 {
     
 }

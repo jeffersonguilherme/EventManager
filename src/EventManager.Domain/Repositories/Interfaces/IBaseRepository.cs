@@ -1,10 +1,10 @@
 namespace EventManager.Domain.Repositories.Interfaces;
 
-public interface IBaseRepository<T> where T : class
+public interface IBaserepository<T> where T : class
 {
-    Task<T> ObterPorId(Guid id);
-    Task<IEnumerable<T>> ObterTodos();
-    Task Adicionar(T entity);
-    Task Atualizar(T entity);
-    Task Excluir(Guid id);
+    Task AddAsync(T entity);
+    Task<T?> GetByIdAsync(Guid id);
+    Task<IEnumerable<T>> GetAllAsync();
+    Task UpdateAsync(T entity);
+    Task DeleteAsync(Guid id);
 }

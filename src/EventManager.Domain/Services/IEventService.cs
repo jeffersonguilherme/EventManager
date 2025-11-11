@@ -4,9 +4,9 @@ namespace EventManager.Domain.Services;
 
 public interface IEventService
 {
-    Task Adicionar(Event evento);
-    Task<IEnumerable<Event>> ObterTodos();
-    Task<Event> ObterPorId(Guid id);
-    Task Atualizar(Event evento);
-    Task Excluir(Guid id);
+    Task AddAsync(Event evento);
+    Task<IEnumerable<Event>> GetAllAsync();
+    Task<Event> GetByIdAsync(Guid id);
+    Task UpdateAsync(Event evento);
+    Task DeleteAsync(Guid id);
 }

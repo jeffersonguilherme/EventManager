@@ -1,45 +1,79 @@
-using System.Data;
+using System.Reflection;
 using Dapper;
 using EventManager.Domain.Repositories.Interfaces;
-using EventManager.Infrastructure.Data;
 
 namespace EventManager.Infrastructure.Repositories.Base;
 
-public class BaseRepository<T> : IBaseRepository<T> where T : class
+public class BaseRepository<T> : IBaserepository<T> where T : class
 {
-    protected readonly IDbConnection _connection;
-    protected readonly string _tableName;
+    private readonly DapperContext _context;
 
-    public BaseRepository(IDbConnection connection)
+    public BaseRepository(DapperContext context)
     {
-        _connection = connection;
-        _tableName = typeof(T).Name;
-    }
-    public Task Adicionar(T entity)
-    {
-        throw new NotImplementedException("Implementar na classe derivada.");
+        _context = context;
     }
 
-    public Task Atualizar(T entity)
+    private string GetTableName()
     {
-        throw new NotImplementedException("Implementar na classe derivada.");
+        var tableAttribute = typeof(T).GetCustomAttribute<System.ComponentModel.DataAnnotations.Schema.TableAttribute>();
+        return tableAttribute?.Name ?? typeof(T).Name;
+    }
+    public async Task AddAsync(T entity)
+    {
+        using var connection = _context.CreateConnection();
+
+        var tableName = GetTableName();
+        var properties = typeof(T)
+                        .GetProperties()
+                        .Where(p => p.Name.ToLower() != "id")
+                        .ToList();
+
+        var columns = string.Join(", ", properties.Select(p => p.Name));
+        var values = string.Join(", ", properties.Select(p => "@" + p.Name));
+
+        var sql = $"INSERT INTO {tableName} ({columns}) VALUES ({values});";
+        await connection.ExecuteAsync(sql, entity);
     }
 
-    public async Task Excluir(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        var sql = $"delete from [{_tableName}] where Id = @Id";
-        await _connection.ExecuteAsync(sql, new { Id = id });
+        using var connection = _context.CreateConnection();
+        var tableName = GetTableName();
+
+        var sql = $"DELETE FROM {tableName} WHERE Id = @id";
+        await connection.ExecuteAsync(sql, new { Id = id });
     }
 
-    public async Task<T> ObterPorId(Guid id)
+    public async Task<IEnumerable<T>> GetAllAsync()
     {
-        var sql = $"select * from [{_tableName}] where Id = @Id";
-        return await _connection.QueryFirstOrDefaultAsync<T>(sql, new { Id = id });
+        using var connection = _context.CreateConnection();
+        var tableName = GetTableName();
+
+        var sql = $"SELECT * FROM {tableName}";
+        return await connection.QueryAsync<T>(sql);
     }
 
-    public async Task<IEnumerable<T>> ObterTodos()
+    public async Task<T?> GetByIdAsync(Guid id)
     {
-        var sql = $"select * from [{_tableName}]";
-        return await _connection.QueryAsync<T>(sql);
+        using var connection = _context.CreateConnection();
+        var tableName = GetTableName();
+
+        var sql = $"SELECT * FROM {tableName} WHERE Id = @Id";
+        return await connection.QueryFirstOrDefaultAsync<T>(sql, new { Id = id });
+    }
+
+    public async Task UpdateAsync(T entity)
+    {
+        using var connection = _context.CreateConnection();
+        var tableName = GetTableName();
+
+        var properties = typeof(T).GetProperties()
+                        .Where(p => p.Name.ToLower() != "id")
+                        .ToList();
+
+        var setClouse = string.Join(", ", properties.Select(p => $"{p.Name} = @{p.Name}"));
+        var sql = $"UPDATE {tableName} SET {setClouse} WHERE Id = @Id";
+
+        await connection.ExecuteAsync(sql, entity);
     }
 }
