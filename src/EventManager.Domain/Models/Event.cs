@@ -1,5 +1,7 @@
-namespace EventManager.Domain.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace EventManager.Domain.Models;
+[Table("Events")]
 public class Event
 {
     public Guid Id { get; set; }
@@ -8,7 +10,8 @@ public class Event
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public string Location { get; set; } = string.Empty;
-    public DateTime DateCreat { get; set; }
+    public DateTime DateCreate { get; set; }
     public DateTime DateUpdate { get; set; }
+
     public List<User>? Users { get; set; }
 }

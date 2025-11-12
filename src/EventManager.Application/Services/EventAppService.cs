@@ -23,7 +23,7 @@ public class EventAppService : IEventAppService
             Location = eventViewModel.Location,
             StartDate = eventViewModel.StartDate,
             EndDate = eventViewModel.EndDate,
-            DateCreat = DateTime.Now,
+            DateCreate = DateTime.Now,
             DateUpdate = DateTime.Now
 
         };

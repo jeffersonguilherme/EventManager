@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using Dapper;
 using EventManager.Domain.Repositories.Interfaces;
@@ -26,6 +27,8 @@ public class BaseRepository<T> : IBaserepository<T> where T : class
         var properties = typeof(T)
                         .GetProperties()
                         .Where(p => p.Name.ToLower() != "id")
+                        .Where(p => p.GetCustomAttribute<NotMappedAttribute>() == null)
+                        .Where(p => !typeof(System.Collections.IEnumerable).IsAssignableFrom(p.PropertyType) || p.PropertyType == typeof(string))
                         .ToList();
 
         var columns = string.Join(", ", properties.Select(p => p.Name));
