@@ -8,6 +8,8 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Event, EventViewModel>().ReverseMap();
+        CreateMap<EventUpdateDto, Event>().ReverseMap();
+        CreateMap<Event, EventCreateDto>().ReverseMap();
+        CreateMap<Event, EventGetDto>().ReverseMap();
     }
 }

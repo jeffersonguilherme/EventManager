@@ -14,7 +14,7 @@ public class EventService : IEventService
 
     public async Task AddAsync(Event evento)
     {
-        await _repository.AddAsync(evento);
+        await _repository.InsertAsync(evento);
     }
 
     public async Task DeleteAsync(Guid id)
@@ -37,6 +37,15 @@ public class EventService : IEventService
         var evento = await _repository.GetByIdAsync(id);
         if (evento == null)
             throw new ArgumentException("Evento não encontrado");
+
+        return evento;
+    }
+
+    public async Task<Event> GetByIdWithUsersAsync(Guid id)
+    {
+        var evento = await _repository.GetByIdWithUsersAsync(id);
+        if (evento == null)
+        throw new ArgumentException("Evento não encontrado");
 
         return evento;
     }

@@ -1,14 +1,33 @@
 using EventManager.Domain.Models;
 using EventManager.Domain.Repositories.Interfaces;
-using EventManager.Infrastructure.Repositories.Base;
 
 namespace EventManager.Infrastructure.Repositories;
 
-public class UserRepository : BaseRepository<User>, IUserRepository
+public class UserRepository : IUserRepository
 {
-    private readonly DapperContext _context;
-    public UserRepository(DapperContext context) : base(context)
+    public Task AddAsync(User entity)
     {
-        _context = context;
+        throw new NotImplementedException();
+    }
+
+    public Task DeleteAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<User>> GetAllAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<User?> GetByIdAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateAsync(User entity)
+    {
+        throw new NotImplementedException();
     }
 }
+

@@ -1,15 +1,124 @@
+using Dapper;
 using EventManager.Domain.Models;
 using EventManager.Domain.Repositories.Interfaces;
-using EventManager.Infrastructure.Repositories.Base;
 
 namespace EventManager.Infrastructure.Repositories;
 
-public class EventRepository : BaseRepository<Event>, IEventRepository
+public class EventRepository : IEventRepository
 {
     private readonly DapperContext _context;
-    public EventRepository(DapperContext context) : base(context)
+
+    public EventRepository(DapperContext context)
     {
         _context = context;
     }
-    
+
+    public async Task AddUserToEventAsync(Guid eventId, Guid userId)
+    {
+        var sql = @"
+            INSERT INTO EventsUsers (EventId, UserId, RegistrationDate)
+            VALUES (@EventId, @UserId, GETDATE());
+        ";
+
+        using var connection = _context.CreateConnection();
+        await connection.ExecuteAsync(sql, new { EventId = eventId, UserId = userId });
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+         var sql = @"DELETE FROM Events WHERE Id = @Id";
+
+        using var connection = _context.CreateConnection();
+        await connection.ExecuteAsync(sql, new { Id = id });
+    }
+
+    public async Task<IEnumerable<Event>> GetAllAsync()
+    {
+        var sql = @"SELECT * FROM Events ORDER BY StartDate";
+
+        using var connection = _context.CreateConnection();
+        return await connection.QueryAsync<Event>(sql);
+    }
+
+    public async Task<Event?> GetByIdAsync(Guid id)
+    {
+        var sql = @"SELECT * FROM Events WHERE Id = @Id";
+
+        using var connection = _context.CreateConnection();
+        return await connection.QueryFirstOrDefaultAsync<Event>(sql, new {Id = id});
+    }
+
+    public async Task<Event?> GetByIdWithUsersAsync(Guid id)
+    {
+        var sql = @"
+        SELECT e.*, u*
+        FROM Events e
+        LEFT JOIN EventsUsers eu ON eu.EventId = e.Id
+        LEFT JOIN Users u ON u.Id = eu.UserId
+        WHERE e.Id = @Id;
+        ";
+
+
+        var eventDictionary = new Dictionary<Guid, Event>();
+
+         using var connection = _context.CreateConnection();
+
+        //retorna o objeto unico conteudo apenas uma lista com event conteundo os users
+        var result = await connection.QueryAsync<Event, User, Event>(
+            sql,
+            (evento, user) =>
+            {
+                if (!eventDictionary.TryGetValue(evento.Id, out var eventEntry))
+                {
+                    eventEntry = evento;
+                    eventEntry.Users = new List<User>();
+                    eventDictionary.Add(eventEntry.Id, eventEntry);
+                }
+
+                if (user != null)
+                    eventEntry.Users!.Add(user);
+
+                return eventEntry;
+            },
+            new { Id = id }
+        );
+
+        return result.FirstOrDefault();
+    }
+
+    public async Task<Guid> InsertAsync(Event evento)
+    {
+        var sql = @"
+            INSERT INTO Events (Id, Name, Description, StartDate, EndDate, Location, DateCreate, DateUpdate)
+            VALUES (@Id, @Name, @Description, @StartDate, @EndDate, @Location, @DateCreate, @DateUpdate);
+        ";
+
+        evento.Id = Guid.NewGuid();
+        evento.DateCreate = DateTime.Now;
+        evento.DateUpdate = DateTime.Now;
+
+        using var connection = _context.CreateConnection();
+        await connection.ExecuteAsync(sql, evento);
+
+        return evento.Id;
+    }
+
+    public async Task UpdateAsync(Event evento)
+    {
+        evento.DateUpdate = DateTime.Now;
+
+        var sql = @"
+            UPDATE Events SET
+                Name = @Name,
+                Description = @Description,
+                StartDate = @StartDate,
+                EndDate = @EndDate,
+                Location = @Location,
+                DateUpdate = @DateUpdate
+            WHERE Id = @Id;
+        ";
+
+        using var connection = _context.CreateConnection();
+        await connection.ExecuteAsync(sql, evento);
+    }
 }
