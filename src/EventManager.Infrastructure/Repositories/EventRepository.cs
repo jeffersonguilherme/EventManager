@@ -32,12 +32,26 @@ public class EventRepository : IEventRepository
         await connection.ExecuteAsync(sql, new { Id = id });
     }
 
-    public async Task<IEnumerable<Event>> GetAllAsync()
+    public async Task<(IEnumerable<Event> events, int totalItems)> GetAllAsync(int pageNumber, int pageSize)
     {
-        var sql = @"SELECT * FROM Events ORDER BY StartDate";
+        var countSql = @"SELECT COUNT(Id) FROM Events"; // faz a contagem de quanto total dos dos eventos
 
+        var sql = @"SELECT * FROM Events ORDER BY StartDate OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY";
+
+        var parametersPaged = new
+        {
+            Skip = (pageNumber - 1) * pageSize, //Calcula quantos registros deve pular
+            Take = pageSize
+        };
+        
         using var connection = _context.CreateConnection();
-        return await connection.QueryAsync<Event>(sql);
+
+        using var multiConsultas = await connection.QueryMultipleAsync($"{countSql};{sql}", parametersPaged);
+        
+        var totalItems = await multiConsultas.ReadFirstAsync<int>();
+        var events = await multiConsultas.ReadAsync<Event>();
+        
+        return (events, totalItems);
     }
 
     public async Task<Event?> GetByIdAsync(Guid id)
@@ -51,12 +65,11 @@ public class EventRepository : IEventRepository
     public async Task<Event?> GetByIdWithUsersAsync(Guid id)
     {
         var sql = @"
-        SELECT e.*, u*
+        SELECT e.*, u.*
         FROM Events e
-        LEFT JOIN EventsUsers eu ON eu.EventId = e.Id
+        LEFT JOIN EventUser eu ON eu.EventId = e.Id
         LEFT JOIN Users u ON u.Id = eu.UserId
-        WHERE e.Id = @Id;
-        ";
+        WHERE e.Id = @Id;";
 
 
         var eventDictionary = new Dictionary<Guid, Event>();
@@ -115,8 +128,7 @@ public class EventRepository : IEventRepository
                 EndDate = @EndDate,
                 Location = @Location,
                 DateUpdate = @DateUpdate
-            WHERE Id = @Id;
-        ";
+            WHERE Id = @Id;";
 
         using var connection = _context.CreateConnection();
         await connection.ExecuteAsync(sql, evento);

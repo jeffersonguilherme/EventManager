@@ -19,15 +19,21 @@ public class EventController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddEventAsync(EventCreateDto eventCreateDto)
     {
-        await _eventAppService.AddEventoAsync(eventCreateDto);
-        return Ok("Evento criado com sucesso.");
+        var response = await _eventAppService.AddEventoAsync(eventCreateDto);
+        if(!response.Status)
+            return BadRequest(response);
+
+        return Ok(response);
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 3
+    )
     {
-        var eventos = await _eventAppService.GetAllAsync();
-        return Ok(eventos);
+        var eventosPaginados = await _eventAppService.GetAllAsync(pageNumber, pageSize);
+        return Ok(eventosPaginados);
     }
 
     [HttpGet("{id:guid}")]

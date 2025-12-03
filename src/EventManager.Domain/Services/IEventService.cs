@@ -5,7 +5,7 @@ namespace EventManager.Domain.Services;
 public interface IEventService
 {
     Task AddAsync(Event evento);
-    Task<IEnumerable<Event>> GetAllAsync();
+    Task<(IEnumerable<Event> events, int totalItems)> GetAllAsync(int pageNumber, int pageSize);
     Task<Event> GetByIdAsync(Guid id);
     Task UpdateAsync(Event evento);
     Task DeleteAsync(Guid id);

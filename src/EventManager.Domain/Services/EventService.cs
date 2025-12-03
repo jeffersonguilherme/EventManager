@@ -26,10 +26,10 @@ public class EventService : IEventService
         await _repository.DeleteAsync(id);
     }
 
-    public async Task<IEnumerable<Event>> GetAllAsync()
+    public async Task<(IEnumerable<Event> events, int totalItems)> GetAllAsync(int pageNumber, int pageSize)
     {
-        var listaEventos = await _repository.GetAllAsync();
-        return listaEventos;
+        var (listaEventos, totalItems) = await _repository.GetAllAsync(pageNumber, pageSize);
+        return (listaEventos, totalItems);
     }
 
     public async Task<Event> GetByIdAsync(Guid id)

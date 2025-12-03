@@ -6,7 +6,7 @@ public interface IEventRepository
 {
     Task<Event?> GetByIdAsync(Guid id);
     Task<Event?> GetByIdWithUsersAsync(Guid id);
-    Task<IEnumerable<Event>> GetAllAsync();
+    Task<(IEnumerable<Event> events, int totalItems)> GetAllAsync(int pageNumber, int pageSize);
     Task<Guid> InsertAsync(Event evt);
     Task UpdateAsync(Event evt);
     Task DeleteAsync(Guid id);
