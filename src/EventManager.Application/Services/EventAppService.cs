@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using AutoMapper;
 using EventManager.Application.DTOs;
 using EventManager.Application.Interfaces;

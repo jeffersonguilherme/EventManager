@@ -1,3 +1,4 @@
+using Dapper;
 using EventManager.Domain.Models;
 using EventManager.Domain.Repositories.Interfaces;
 
@@ -5,9 +6,24 @@ namespace EventManager.Infrastructure.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    public Task AddAsync(User entity)
+    private readonly DapperContext _context;
+
+    public UserRepository(DapperContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
+    }
+
+    public async Task<Guid> AddAsync(User user)
+    {
+        var sql = @"INSERT INTO [Users](Id, FullName, Email)
+        VALUES (@Id, @FullName, @Email)";
+
+        user.Id = Guid.NewGuid();
+
+        using var connection = _context.CreateConnection();
+        await connection.ExecuteAsync(sql, user);
+
+        return user.Id;
     }
 
     public Task DeleteAsync(Guid id)
@@ -25,7 +41,7 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task UpdateAsync(User entity)
+    public Task UpdateAsync(User user)
     {
         throw new NotImplementedException();
     }

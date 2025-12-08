@@ -17,8 +17,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IEventAppService, EventAppService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
+
 builder.Services.AddScoped<IUserAppService, UserAppService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+
 
 builder.Services.AddScoped<DapperContext>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
