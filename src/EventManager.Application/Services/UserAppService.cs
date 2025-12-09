@@ -100,7 +100,7 @@ public class UserAppService : IUserAppService
             await _userService.UpdateAsync(user);
             return new ResponseModel<UserUpdateDto>
             {
-                Mensagem = $"{user.Id} Atualizado com sucesso!"
+                Mensagem = $"Usuário Atualizado com sucesso!"
             };
         }catch(ArgumentException ex)
         {

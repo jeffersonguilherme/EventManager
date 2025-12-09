@@ -44,5 +44,10 @@ public class UserController : ControllerBase
         return Ok(usersPaginado);
     }
 
-    
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateUser(Guid id, UserUpdateDto userUpdateDto)
+    {
+        await _userAppService.UpdateAync(id, userUpdateDto);
+        return Ok("Usuário atualiza com sucesso");
+    }
 }
