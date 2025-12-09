@@ -50,4 +50,11 @@ public class UserController : ControllerBase
         await _userAppService.UpdateAync(id, userUpdateDto);
         return Ok("Usuário atualiza com sucesso");
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await _userAppService.DeleteAsync(id);
+        return Ok("Usuário deleteado com sucesso");
+    }
 }

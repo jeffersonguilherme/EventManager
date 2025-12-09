@@ -38,9 +38,23 @@ public class UserAppService : IUserAppService
         }
     }
 
-    public Task<ResponseModel<UserGetDto>> DeleteAsync(Guid id)
+    public async Task<ResponseModel<UserGetDto>> DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _userService.DeleteAsync(id);
+            return new ResponseModel<UserGetDto>
+            {
+                Mensagem = "Usuário excluido com sucesso!"
+            };            
+        }catch(ArgumentException ex)
+        {
+            return new ResponseModel<UserGetDto>
+            {
+                Mensagem = ex.Message,
+                Status = false
+            };
+        }
     }
 
     public async Task<PagedResponse<UserGetDto>> GetAllAsync(int pageNumber, int pageSize)
