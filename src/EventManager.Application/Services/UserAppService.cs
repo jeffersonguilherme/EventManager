@@ -1,6 +1,5 @@
 using AutoMapper;
 using EvenetManager.Domain.DTOs.User;
-using EventManager.Application.DTOs;
 using EventManager.Application.Interfaces;
 using EventManager.Domain.Models;
 using EventManager.Domain.Response;

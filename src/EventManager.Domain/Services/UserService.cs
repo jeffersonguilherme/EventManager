@@ -17,23 +17,45 @@ public class UserService : IUserService
         await _repository.AddAsync(user);
     }
 
-    public Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
+    {
+        var user = await _repository.GetByIdAsync(id);
+        if(user ==null)
+            throw new ArgumentException("Usuario não encontrado");
+
+        await _repository.DeleteAsync(id);
+    }
+
+    public async Task<IEnumerable<User>> GetAllAsync()
+    {
+        var listaUsers = await _repository.GetAllAsync();
+        return listaUsers;
+    }
+
+    public async Task<User> GetByIdAsync(Guid id)
+    {
+        var user = await _repository.GetByIdAsync(id);
+        if(user == null)
+            throw new ArgumentException("Usuário não encontrado");
+
+        return user;
+    }
+
+    public Task<IEnumerable<Event>> GetUserEventsAsync(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<User>> GetAllAsync()
+    public async Task UpdateAsync(User userModel)
     {
-        throw new NotImplementedException();
-    }
+        var user = await _repository.GetByIdAsync(userModel.Id);
 
-    public Task<User> GetByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
+        if(user == null)
+            throw new ArgumentException("Usuario não encontrado");
+        
+        user.FullName = userModel.FullName;
+        user.Email = userModel.Email;
 
-    public Task UpdateAsync(User user)
-    {
-        throw new NotImplementedException();
+        await _repository.UpdateAsync(user);
     }
 }

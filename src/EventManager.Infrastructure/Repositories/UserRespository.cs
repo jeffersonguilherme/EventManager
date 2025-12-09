@@ -26,24 +26,51 @@ public class UserRepository : IUserRepository
         return user.Id;
     }
 
-    public Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var sql = @"DELETE FROM Users WHERE Id = @Id";
+
+        using var connection = _context.CreateConnection();
+        await connection.ExecuteAsync(sql, new{Id = id});
     }
 
-    public Task<IEnumerable<User>> GetAllAsync()
+    public async Task<(IEnumerable<User> users, int totalItems)> GetAllAsync(int pageNumber, int pageSize)
     {
-        throw new NotImplementedException();
+        var countSql = @"SELECT COUNT(Id) FROM Users";
+        var sql = @"SELECT * FROM Users ORDER BY FullName OFFSET @Skip ROWS FETCH NEXT @Take ROWS ONLY";
+
+        var parametersPaged = new
+        {
+            Skip = (pageNumber - 1) * pageSize,
+            Take = pageSize
+        };
+
+        using var connection = _context.CreateConnection();
+
+        using var multiConsultas = await connection.QueryMultipleAsync($"{countSql};{sql}", parametersPaged);
+
+        var totalItems = await multiConsultas.ReadFirstAsync<int>();
+        var users = await multiConsultas.ReadAsync<User>();
+        return (users, totalItems);
     }
 
-    public Task<User?> GetByIdAsync(Guid id)
+    public async Task<User?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var sql = @"SELECT * FROM [Users] WHERE Id = @Id";
+
+        using var connection = _context.CreateConnection();
+        return await connection.QueryFirstOrDefaultAsync<User>(sql, new {Id = id});
     }
 
-    public Task UpdateAsync(User user)
+    public async Task UpdateAsync(User user)
     {
-        throw new NotImplementedException();
+        var sql = @"UPDATE Users SET
+                    FullName = @FullName,
+                    Email = @Email
+                WHERE Id = @Id;";
+
+        using var connection = _context.CreateConnection();
+        await connection.ExecuteAsync(sql, user);
     }
 }
 
