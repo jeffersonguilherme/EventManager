@@ -91,8 +91,24 @@ public class UserAppService : IUserAppService
         }
     }
 
-    public Task<ResponseModel<UserUpdateDto>> UpdateAync(Guid id, UserUpdateDto userUpdateDto)
+    public async Task<ResponseModel<UserUpdateDto>> UpdateAync(Guid id, UserUpdateDto userUpdateDto)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var user = _mapper.Map<User>(userUpdateDto);
+            user.Id = id;
+            await _userService.UpdateAsync(user);
+            return new ResponseModel<UserUpdateDto>
+            {
+                Mensagem = $"{user.Id} Atualizado com sucesso!"
+            };
+        }catch(ArgumentException ex)
+        {
+            return new ResponseModel<UserUpdateDto>
+            {
+                Mensagem = ex.Message,
+                Status = false
+            };
+        }
     }
 }
