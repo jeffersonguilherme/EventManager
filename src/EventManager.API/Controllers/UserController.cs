@@ -26,5 +26,22 @@ public class UserController : ControllerBase
 
         return Ok(response);
     }
+    
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetUserById(Guid id)
+    {
+        var user = await _userAppService.GetByIdAsync(id);
+        return Ok(user);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllUser(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 4
+    )
+    {
+        var usersPaginado = await _userAppService.GetAllAsync(pageNumber, pageSize);
+        return Ok(usersPaginado);
+    }
 
 }

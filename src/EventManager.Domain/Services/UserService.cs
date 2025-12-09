@@ -1,5 +1,6 @@
 using EventManager.Domain.Models;
 using EventManager.Domain.Repositories.Interfaces;
+using EventManager.Domain.Response;
 
 namespace EventManager.Domain.Services;
 
@@ -26,11 +27,20 @@ public class UserService : IUserService
         await _repository.DeleteAsync(id);
     }
 
-    public async Task<IEnumerable<User>> GetAllAsync()
+    public async Task<PagedResponse<User>> GetAllPagedAsync(int pageNumber, int pageSize)
     {
-        var listaUsers = await _repository.GetAllAsync();
-        return listaUsers;
+    var (users, totalItems) = await _repository.GetAllAsync(pageNumber, pageSize);
+
+        return new PagedResponse<User>
+    {
+        Dados = users,
+        PageNumber = pageNumber,
+        PageSize = pageSize,
+        TotalItems = totalItems,
+        TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize)
+    };
     }
+
 
     public async Task<User> GetByIdAsync(Guid id)
     {

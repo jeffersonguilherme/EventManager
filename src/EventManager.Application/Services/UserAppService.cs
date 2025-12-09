@@ -43,14 +43,38 @@ public class UserAppService : IUserAppService
         throw new NotImplementedException();
     }
 
-    public Task<PagedResponse<UserGetDto>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<PagedResponse<UserGetDto>> GetAllAsync(int pageNumber, int pageSize)
     {
-        throw new NotImplementedException();
+        var pagedResult = await _userService.GetAllPagedAsync(pageNumber, pageSize);
+        var userDto = _mapper.Map<IEnumerable<UserGetDto>>(pagedResult.Dados);
+
+        return new PagedResponse<UserGetDto>(
+            userDto,
+            pagedResult.PageNumber,
+            pagedResult.PageSize,
+            pagedResult.TotalPages
+        );
     }
 
-    public Task<ResponseModel<UserGetDto>> GetByIdAsync(Guid id)
+    public async Task<ResponseModel<UserGetDto>> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var user = await _userService.GetByIdAsync(id);
+            var userDto = _mapper.Map<UserGetDto>(user);
+            return new ResponseModel<UserGetDto>
+            {
+              Dados = userDto,
+              Mensagem = "Usuário localizado!"  
+            };
+        }catch(ArgumentException ex)
+        {
+            return new ResponseModel<UserGetDto>
+            {
+                Mensagem = ex.Message,
+                Status = false
+            };
+        }
     }
 
     public Task<ResponseModel<UserUpdateDto>> UpdateAync(Guid id, UserUpdateDto userUpdateDto)
