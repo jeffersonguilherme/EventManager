@@ -45,6 +45,9 @@ public class UserAppService : IUserAppService
 
     public async Task<PagedResponse<UserGetDto>> GetAllAsync(int pageNumber, int pageSize)
     {
+        try
+        {
+            
         var pagedResult = await _userService.GetAllPagedAsync(pageNumber, pageSize);
         var userDto = _mapper.Map<IEnumerable<UserGetDto>>(pagedResult.Dados);
 
@@ -52,8 +55,19 @@ public class UserAppService : IUserAppService
             userDto,
             pagedResult.PageNumber,
             pagedResult.PageSize,
-            pagedResult.TotalPages
+            pagedResult.TotalItems
         );
+        }catch(Exception ex)
+        {
+            return new PagedResponse<UserGetDto>
+            {
+                Dados = Enumerable.Empty<UserGetDto>(),
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = 0,
+                TotalPages = 0
+            };
+        }
     }
 
     public async Task<ResponseModel<UserGetDto>> GetByIdAsync(Guid id)
