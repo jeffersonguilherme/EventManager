@@ -18,20 +18,22 @@ public class EventAppService : IEventAppService
         _mapper = mapper;
     }
 
-    public async Task<ResponseModel<Event>> AddEventoAsync(EventCreateDto eventCreateDto)
+    public async Task<ResponseModel<EventGetDto>> AddEventoAsync(EventCreateDto eventCreateDto)
     {
         try
         {
             var evento = _mapper.Map<Event>(eventCreateDto);
             await _eventService.AddAsync(evento);
-            return new ResponseModel<Event>
+            var eventoDto = _mapper.Map<EventGetDto>(evento);
+            return new ResponseModel<EventGetDto>
             {
+                Dados = eventoDto,
                 Mensagem = "Evento criado com sucesso",
             };
         }
         catch (ArgumentException ex)
         {
-            return new ResponseModel<Event>
+            return new ResponseModel<EventGetDto>
             {
                 Mensagem = ex.Message,
                 Status = false
@@ -39,18 +41,18 @@ public class EventAppService : IEventAppService
         }
     }
 
-    public async Task<ResponseModel<Event>> DeleteAsync(Guid id)
+    public async Task<ResponseModel<EventGetDto>> DeleteAsync(Guid id)
     {
         try
         {
             await _eventService.DeleteAsync(id);
-            return new ResponseModel<Event>
+            return new ResponseModel<EventGetDto>
             {
                 Mensagem = "Evento excluindo com sucesso"
             };
         }catch(ArgumentException ex)
         {
-            return new ResponseModel<Event>
+            return new ResponseModel<EventGetDto>
             {
                 Mensagem = ex.Message,
                 Status = false
@@ -115,21 +117,30 @@ public class EventAppService : IEventAppService
     }
 
 
-    public async Task<ResponseModel<Event>> UpdateAsync(Guid id, EventUpdateDto eventUpdateDto)
+    public async Task<ResponseModel<EventUpdateDto>> UpdateAsync(Guid id, EventUpdateDto eventUpdateDto)
     {
         try
         {
             
-        var evento = _mapper.Map<Event>(eventUpdateDto);
-        evento.Id = id;
-        await _eventService.UpdateAsync(evento);
-        return new ResponseModel<Event>
+            var eventoExistente = await _eventService.GetByIdAsync(id);
+            if(eventoExistente == null)
             {
-                Mensagem = "Evento atualizado com sucesso",
-            };
+                return new ResponseModel<EventUpdateDto>
+                {
+                    Status = false,
+                    Mensagem = "Evento não encontrado"
+                };
+            }
+                _mapper.Map(eventUpdateDto, eventoExistente);
+                await _eventService.UpdateAsync(eventoExistente);
+                return new ResponseModel<EventUpdateDto>
+                {
+                    Mensagem = "Evento atualizado com sucesso",
+                    Dados = eventUpdateDto
+                };
         }catch(ArgumentException ex)
         {
-            return new ResponseModel<Event>
+            return new ResponseModel<EventUpdateDto>
             {
                 Mensagem = ex.Message,
                 Status = false
