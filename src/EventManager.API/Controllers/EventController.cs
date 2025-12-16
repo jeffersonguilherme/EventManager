@@ -1,4 +1,4 @@
-using EventManager.Application.DTOs;
+using EventManager.Application.DTOs.Events;
 using EventManager.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,13 +40,6 @@ public class EventController : ControllerBase
     public async Task<IActionResult> GetByIdAsync(Guid id)
     {
         var evento = await _eventAppService.GetByIdAsync(id);
-        return Ok(evento);
-    }
-
-    [HttpGet("{id:guid}/users")]
-    public async Task<IActionResult> GetByIdWithUsers(Guid id)
-    {
-        var evento = await _eventAppService.GetByIdWithUsersAsync(id);
         return Ok(evento);
     }
 
