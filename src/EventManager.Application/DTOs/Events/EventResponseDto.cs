@@ -11,10 +11,7 @@ public class EventGetDto
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public string Location { get; set; } = string.Empty;
-
-    [JsonIgnore]
-    public DateTime DateCreat { get; set; }
-    [JsonIgnore]
-    public DateTime DateUpdate { get; set; }
-
+    public int MaxParticipants { get; set; }
+    public bool IsActive { get; set; }
+    public int TicketsSold { get; set; }
 }

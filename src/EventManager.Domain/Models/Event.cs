@@ -15,7 +15,5 @@ public class Event
     public DateTime DateUpdate { get; set; }
     public int MaxParticipants { get; set; }
     public bool IsActive { get; set; } = true;
-
     public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
-
 }
