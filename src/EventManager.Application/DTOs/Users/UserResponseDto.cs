@@ -1,4 +1,4 @@
-namespace EvenetManager.Domain.DTOs.User;
+namespace EvenetManager.Application.DTOs.Users;
 
 public class UserResponseDto
 {

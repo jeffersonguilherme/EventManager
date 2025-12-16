@@ -1,4 +1,4 @@
-namespace EventManager.Application.DTOs;
+namespace EventManager.Application.DTOs.Events;
 
 public class EventUpdateDto
 {

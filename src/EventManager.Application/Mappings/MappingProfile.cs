@@ -1,6 +1,6 @@
 using AutoMapper;
-using EvenetManager.Domain.DTOs.User;
-using EventManager.Application.DTOs;
+using EvenetManager.Application.DTOs.Users;
+using EventManager.Application.DTOs.Events;
 using EventManager.Domain.Models;
 
 namespace EventManager.Application.Mappings;
@@ -9,17 +9,14 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<EventUpdateDto, Event>().ReverseMap();
-        CreateMap<Event, EventCreateDto>().ReverseMap();
-        CreateMap<Event, EventGetDto>().ReverseMap();
+        CreateMap<EventCreateDto, Event>();
+        CreateMap<EventUpdateDto, Event>();
+        CreateMap<Event, EventResponseDto>();
 
         //User 
-        CreateMap<User, UserCreateDto>().ReverseMap();
-        CreateMap<UserCreateDto, User>().ReverseMap();
-        CreateMap<UserGetDto, User>().ReverseMap();
-        CreateMap<User, UserGetDto>().ReverseMap();
-        CreateMap<User, UserUpdateDto>().ReverseMap();
-        CreateMap<UserUpdateDto, User>().ReverseMap();
+        CreateMap<UserCreateDto, User>();
+        CreateMap<UserUpdateDto, User>();
+        CreateMap<User, UserResponseDto>();
 
     }
 }

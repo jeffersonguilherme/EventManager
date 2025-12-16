@@ -41,15 +41,6 @@ public class EventService : IEventService
         return evento;
     }
 
-    public async Task<Event> GetByIdWithUsersAsync(Guid id)
-    {
-        var evento = await _repository.GetByIdWithUsersAsync(id);
-        if (evento == null)
-        throw new ArgumentException("Evento não encontrado");
-
-        return evento;
-    }
-
     public async Task UpdateAsync(Event paramEvento)
     {
         var evento = await _repository.GetByIdAsync(paramEvento.Id);

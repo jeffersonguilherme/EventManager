@@ -9,5 +9,4 @@ public interface IEventService
     Task<Event> GetByIdAsync(Guid id);
     Task UpdateAsync(Event evento);
     Task DeleteAsync(Guid id);
-    Task<Event> GetByIdWithUsersAsync(Guid id); 
 }
