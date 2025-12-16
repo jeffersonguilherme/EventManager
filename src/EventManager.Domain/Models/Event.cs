@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using EvenetManager.Domain.Models;
 
 namespace EventManager.Domain.Models;
 [Table("Events")]
@@ -12,28 +13,9 @@ public class Event
     public string Location { get; set; } = string.Empty;
     public DateTime DateCreate { get; set; }
     public DateTime DateUpdate { get; set; }
+    public int MaxParticipants { get; set; }
+    public bool IsActive { get; set; } = true;
 
-    public List<User>? Users { get; set; }
+    public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
-    private Event(){}
-    public Event(string name, DateTime startDate, DateTime endDate)
-    {
-        if(startDate <= endDate)
-            throw new ArgumentException("A data de início deve ser menor que a data de termino do evento!");
-
-        Name = name;
-        StartDate = startDate;
-        EndDate = endDate;
-    }
-
-    public void Update(string name, DateTime startDate, DateTime endDate)
-    {
-        if (startDate >= endDate)
-            throw new ArgumentException("A data de início deve ser menor que a data de término!");
-
-        Name = name;
-        StartDate = startDate;
-        EndDate = endDate;
-        DateUpdate = DateTime.UtcNow;
-    }
 }
