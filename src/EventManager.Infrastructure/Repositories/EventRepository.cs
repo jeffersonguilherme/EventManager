@@ -62,42 +62,6 @@ public class EventRepository : IEventRepository
         return await connection.QueryFirstOrDefaultAsync<Event>(sql, new {Id = id});
     }
 
-    public async Task<Event?> GetByIdWithUsersAsync(Guid id)
-    {
-        var sql = @"
-        SELECT e.*, u.*
-        FROM Events e
-        LEFT JOIN EventUser eu ON eu.EventId = e.Id
-        LEFT JOIN Users u ON u.Id = eu.UserId
-        WHERE e.Id = @Id;";
-
-
-        var eventDictionary = new Dictionary<Guid, Event>();
-
-         using var connection = _context.CreateConnection();
-
-        //retorna o objeto unico conteudo apenas uma lista com event conteundo os users
-        var result = await connection.QueryAsync<Event, User, Event>(
-            sql,
-            (evento, user) =>
-            {
-                if (!eventDictionary.TryGetValue(evento.Id, out var eventEntry))
-                {
-                    eventEntry = evento;
-                    eventEntry.Users = new List<User>();
-                    eventDictionary.Add(eventEntry.Id, eventEntry);
-                }
-
-                if (user != null)
-                    eventEntry.Users!.Add(user);
-
-                return eventEntry;
-            },
-            new { Id = id }
-        );
-
-        return result.FirstOrDefault();
-    }
 
     public async Task<Guid> InsertAsync(Event evento)
     {

@@ -1,6 +1,6 @@
-namespace EventManager.Application.DTOs;
+namespace EventManager.Application.DTOs.Events;
 
-public class EventGetDto
+public class EventResponseDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;

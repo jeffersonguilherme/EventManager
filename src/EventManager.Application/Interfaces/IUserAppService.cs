@@ -1,6 +1,5 @@
 using EvenetManager.Application.DTOs.Users;
 using EvenetManager.Domain.DTOs.User;
-using EventManager.Domain.Models;
 using EventManager.Domain.Response;
 
 namespace EventManager.Application.Interfaces;
