@@ -19,7 +19,7 @@ public class EventController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddEventAsync(EventCreateDto eventCreateDto)
     {
-        var response = await _eventAppService.AddEventoAsync(eventCreateDto);
+        var response = await _eventAppService.AddEventAsync(eventCreateDto);
         if(!response.Status)
             return BadRequest(response);
 
@@ -27,7 +27,7 @@ public class EventController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(
+    public async Task<IActionResult> GetAllAsync(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 3
     )
@@ -37,7 +37,7 @@ public class EventController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(Guid id)
+    public async Task<IActionResult> GetByIdAsync(Guid id)
     {
         var evento = await _eventAppService.GetByIdAsync(id);
         return Ok(evento);
@@ -51,13 +51,13 @@ public class EventController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, EventUpdateDto eventUpdateDto)
+    public async Task<IActionResult> UpdateAsync(Guid id, EventUpdateDto eventUpdateDto)
     {
         await _eventAppService.UpdateAsync(id, eventUpdateDto);
         return Ok("Evento atualizado com sucesso!");
     }
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> DeleteAsync(Guid id)
     {
         await _eventAppService.DeleteAsync(id);
         return Ok("Evento deletado com sucesso");
