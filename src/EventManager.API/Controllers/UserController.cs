@@ -1,5 +1,4 @@
-using EvenetManager.Domain.DTOs.User;
-using EventManager.Application.DTOs;
+using EvenetManager.Application.DTOs.Users;
 using EventManager.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
