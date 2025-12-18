@@ -15,8 +15,8 @@ public class UserRepository : IUserRepository
 
     public async Task<Guid> AddAsync(User user)
     {
-        var sql = @"INSERT INTO [Users](Id, FullName, Email)
-        VALUES (@Id, @FullName, @Email)";
+        var sql = @"INSERT INTO [Users](Id, FullName, Email, PasswordHash)
+        VALUES (@Id, @FullName, @Email, @PasswordHash)";
 
         user.Id = Guid.NewGuid();
 
@@ -54,6 +54,7 @@ public class UserRepository : IUserRepository
         return (users, totalItems);
     }
 
+
     public async Task<User?> GetByIdAsync(Guid id)
     {
         var sql = @"SELECT * FROM [Users] WHERE Id = @Id";
@@ -61,6 +62,7 @@ public class UserRepository : IUserRepository
         using var connection = _context.CreateConnection();
         return await connection.QueryFirstOrDefaultAsync<User>(sql, new {Id = id});
     }
+
 
     public async Task UpdateAsync(User user)
     {
@@ -71,6 +73,29 @@ public class UserRepository : IUserRepository
 
         using var connection = _context.CreateConnection();
         await connection.ExecuteAsync(sql, user);
+    }
+
+    public async Task<User?> GetByEmailAndPassawordAsync(string email, string passwordHash)
+    {
+        var sql = @"SELECT * FROM Users WHERE Email = @Email AND PasswordHash = @PasswordHash";
+        
+        using var connection = _context.CreateConnection();
+        return await connection.QueryFirstOrDefaultAsync<User>(sql, new
+        {
+            Email = email,
+            PasswordHash = passwordHash
+        });
+    }
+    public async Task SaveTokenAsync(Guid userId, string token)
+    {
+        var sql = @"UPDATE Users SET Token = @Token WHERE  Id = @Id";
+
+        using var connection = _context.CreateConnection();
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = userId,
+            Token = token
+        });
     }
 }
 

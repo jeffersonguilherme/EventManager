@@ -12,6 +12,7 @@ public class User
 
     public string PasswordHash { get; set; } = string.Empty;
     public bool EmailConfirmed { get; set; }
+    public string Token { get; set; } = string.Empty;
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; }
     public ICollection<Ticket>? Tickets { get; set; } = new List<Ticket>();

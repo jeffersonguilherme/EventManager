@@ -56,6 +56,7 @@ public class UserService : IUserService
         throw new NotImplementedException();
     }
 
+
     public async Task UpdateAsync(User userModel)
     {
         var user = await _repository.GetByIdAsync(userModel.Id);
@@ -67,5 +68,17 @@ public class UserService : IUserService
         user.Email = userModel.Email;
 
         await _repository.UpdateAsync(user);
+    }
+    public async Task<string> LoginAsync(string email, string passwordHash)
+    {
+        var user = await _repository.GetByEmailAndPassawordAsync(email, passwordHash);
+        
+        if(user == null)
+            throw new ArgumentException("Email ou senha inválidas");
+
+            var token = Guid.NewGuid().ToString();
+
+            await _repository.SaveTokenAsync(user.Id, token);
+            return token;
     }
 }

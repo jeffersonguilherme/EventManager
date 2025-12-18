@@ -1,5 +1,6 @@
 using AutoMapper;
 using EvenetManager.Application.DTOs.Users;
+using EventManager.Application.DTOs.Login;
 using EventManager.Application.Interfaces;
 using EventManager.Domain.Models;
 using EventManager.Domain.Response;
@@ -119,6 +120,30 @@ public class UserAppService : IUserAppService
         }catch(ArgumentException ex)
         {
             return new ResponseModel<bool>
+            {
+                Mensagem = ex.Message,
+                Status = false
+            };
+        }
+    }
+
+    public async Task<ResponseModel<LoginResponse>> LoginAsync(LoginRequest request)
+    {
+        try
+        {
+            var token = await _userService.LoginAsync(request.Email, request.PasswordHash);
+
+            return new ResponseModel<LoginResponse>
+            {
+                Dados = new LoginResponse
+                {
+                    Token = token
+                }, Mensagem = "Login realizado com sucesso"
+            };
+
+        }catch(ArgumentException ex)
+        {
+            return new ResponseModel<LoginResponse>
             {
                 Mensagem = ex.Message,
                 Status = false

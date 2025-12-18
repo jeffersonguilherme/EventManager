@@ -1,4 +1,5 @@
 using EvenetManager.Application.DTOs.Users;
+using EventManager.Application.DTOs.Login;
 using EventManager.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -55,5 +56,15 @@ public class UserController : ControllerBase
     {
         await _userAppService.DeleteAsync(id);
         return Ok("Usuário deleteado com sucesso");
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginRequest request)
+    {
+        var result = await _userAppService.LoginAsync(request);
+        if(!result.Status)
+            return Unauthorized(result);
+
+        return Ok(result);
     }
 }

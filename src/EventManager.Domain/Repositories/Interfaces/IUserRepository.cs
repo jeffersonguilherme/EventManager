@@ -10,4 +10,6 @@ public interface IUserRepository
 
     Task UpdateAsync(User userModel);
     Task DeleteAsync(Guid id);
+    Task<User?> GetByEmailAndPassawordAsync(string email, string password);
+    Task SaveTokenAsync(Guid userId, string token);
 }
